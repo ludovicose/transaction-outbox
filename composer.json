@@ -1,0 +1,21 @@
+{
+    "name": "ludovicose/transaction-outbox",
+    "type": "library",
+    "autoload": {
+        "psr-4": {
+            "Ludovicose\\TransactionOutbox\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "Aibek Muratbekov",
+            "email": "aibek.muratbekov@gmail.com"
+        }
+    ],
+    "minimum-stability": "dev",
+    "require": {
+        "php": "^8.1",
+        "symfony/serializer": "^6.0",
+        "symfony/property-access": "^6.0"
+    }
+}
