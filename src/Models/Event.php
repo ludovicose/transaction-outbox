@@ -19,4 +19,9 @@ final class Event
     {
         return $this->payload;
     }
+
+    public function getId()
+    {
+        return $this->id;
+    }
 }
