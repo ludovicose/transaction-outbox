@@ -8,4 +8,6 @@ use Ludovicose\TransactionOutbox\Models\Event;
 interface EventRepository
 {
     public function persist(Event $event): void;
+
+    public function findById(string $id): Event;
 }

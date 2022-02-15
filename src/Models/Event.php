@@ -24,4 +24,9 @@ final class Event
     {
         return $this->id;
     }
+
+    public function setSuccessEvent()
+    {
+
+    }
 }

@@ -12,4 +12,9 @@ final class EloquentEventRepository implements EventRepositoryContract
     {
 
     }
+
+    public function findById(string $id): Event
+    {
+        // TODO: Implement findById() method.
+    }
 }

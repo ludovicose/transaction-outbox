@@ -14,4 +14,9 @@ final class MemoryEventRepository implements EventRepositoryContract
     {
 
     }
+
+    public function findById(string $id): Event
+    {
+        return new Event();
+    }
 }
