@@ -25,6 +25,7 @@ final class CreatePublishEventHandler
         $model->payload  = $data;
         $model->event_id = Str::uuid()->toString();
         $model->channel  = $command->event->getChannel();
+        $model->type     = Event::TYPE_PUBLISH;
 
         $this->eventRepository->persist($model);
 

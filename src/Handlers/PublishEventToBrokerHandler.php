@@ -20,7 +20,9 @@ final class PublishEventToBrokerHandler
 
     public function handle(PublishEventToBrokerCommand $command)
     {
-        $this->messageBroker->publish($command->eventModel->getChannel(), $command->eventModel->toJson());
+        retry(5, function () use ($command) {
+            $this->messageBroker->publish($command->eventModel->getChannel(), $command->eventModel->toJson());
+        }, 1000);
 
         event(new EventPublished($command->eventModel->getId()));
     }
