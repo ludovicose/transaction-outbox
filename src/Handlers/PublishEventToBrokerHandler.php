@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Ludovicose\TransactionOutbox\Handlers;
 
 use Ludovicose\TransactionOutbox\Commands\PublishEventToBrokerCommand;
-use Ludovicose\TransactionOutbox\Contracts\EventPublishSerializer;
 use Ludovicose\TransactionOutbox\Contracts\MessageBroker;
 use Ludovicose\TransactionOutbox\Events\EventPublished;
 
