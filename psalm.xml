@@ -1,0 +1,31 @@
+<?xml version="1.0"?>
+<psalm
+    phpVersion="8.1"
+    errorLevel="4"
+    resolveFromConfigFile="true"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns="https://getpsalm.org/schema/config"
+    xsi:schemaLocation="https://getpsalm.org/schema/config vendor/vimeo/psalm/config.xsd"
+>
+    <projectFiles>
+        <ignoreFiles>
+            <directory name="vendor"/>
+        </ignoreFiles>
+    </projectFiles>
+    <issueHandlers>
+        <MoreSpecificReturnType errorLevel="suppress"/>
+        <LessSpecificReturnStatement errorLevel="suppress"/>
+        <MixedInferredReturnType errorLevel="suppress"/>
+        <MixedReturnStatement errorLevel="suppress"/>
+        <UnresolvableInclude errorLevel="suppress"/>
+        <MixedAssignment errorLevel="suppress"/>
+        <MixedOperand errorLevel="suppress"/>
+        <MixedArgument errorLevel="suppress"/>
+        <MixedMethodCall errorLevel="suppress"/>
+        <MixedArrayAccess errorLevel="suppress"/>
+        <MixedPropertyFetch errorLevel="suppress"/>
+        <PropertyNotSetInConstructor errorLevel="suppress"/>
+        <MixedPropertyAssignment errorLevel="suppress"/>
+        <MissingClosureParamType errorLevel="suppress"/>
+    </issueHandlers>
+</psalm>

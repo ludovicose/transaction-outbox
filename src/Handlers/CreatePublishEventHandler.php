@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace Ludovicose\TransactionOutbox\Handlers;
@@ -14,7 +15,6 @@ final class CreatePublishEventHandler
 {
     public function __construct(public EventRepository $eventRepository)
     {
-
     }
 
     public function handle(CreatePublishEventCommand $command)

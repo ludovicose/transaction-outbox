@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace Ludovicose\TransactionOutbox\Repositories;
@@ -10,7 +11,6 @@ final class EloquentEventRepository implements EventRepositoryContract
 {
     public function persist(Event $event): void
     {
-
     }
 
     public function findById(string $id): Event

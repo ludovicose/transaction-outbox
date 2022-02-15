@@ -1,10 +1,12 @@
 <?php
+
 declare(strict_types=1);
 
 namespace Ludovicose\TransactionOutbox;
 
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\ServiceProvider;
+use Ludovicose\TransactionOutbox\Console\EventListenCommand;
 use Ludovicose\TransactionOutbox\Contracts\EventPublishSerializer;
 use Ludovicose\TransactionOutbox\Contracts\EventRepository;
 use Ludovicose\TransactionOutbox\Contracts\MessageBroker;
@@ -27,9 +29,11 @@ class PackageServiceProvider extends ServiceProvider
         $this->app->bind(EventPublishSerializer::class, config('transaction-outbox.event_publish_serialize'));
         $this->app->bind(MessageBroker::class, config('transaction-outbox.broker'));
 
+        $this->commands([
+            EventListenCommand::class,
+        ]);
 
         $this->loadMigrationsFrom(__DIR__ . '/../database/migrations');
-
     }
 
     public function boot()

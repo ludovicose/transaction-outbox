@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace Ludovicose\TransactionOutbox\Commands;
@@ -9,6 +10,5 @@ final class CreatePublishEventCommand
 {
     public function __construct(public ShouldBePublish $event)
     {
-
     }
 }
