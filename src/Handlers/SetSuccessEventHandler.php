@@ -15,7 +15,7 @@ final class SetSuccessEventHandler
 
     public function handle(SetSuccessEventCommand $command)
     {
-        $event = $this->eventRepository->findById($command->id);
+        $event = $this->eventRepository->findByEventId($command->id);
         $event->setSuccessEvent();
         $this->eventRepository->persist($event);
     }

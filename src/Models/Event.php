@@ -17,6 +17,8 @@ class Event extends Model
 
     const TYPE_PUBLISH = 'publish';
     const TYPE_SUBSCRIBE = 'subscribe';
+    const TYPE_REQUEST = 'request';
+    const DEFAULT_CHANNEL = 'default';
 
     public function getChannel(): string
     {
