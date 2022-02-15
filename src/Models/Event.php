@@ -3,13 +3,10 @@ declare(strict_types=1);
 
 namespace Ludovicose\TransactionOutbox\Models;
 
-final class Event
+use Illuminate\Database\Eloquent\Model;
+
+class Event extends Model
 {
-    public function __construct()
-    {
-
-    }
-
     public function getChannel(): string
     {
         return $this->channel;
@@ -20,13 +17,13 @@ final class Event
         return $this->payload;
     }
 
-    public function getId()
+    public function getId(): string
     {
-        return $this->id;
+        return $this->event_id;
     }
 
     public function setSuccessEvent()
     {
-
+        $this->success_at = now();
     }
 }

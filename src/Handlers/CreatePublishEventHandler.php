@@ -21,10 +21,10 @@ final class CreatePublishEventHandler
     {
         $data = app(EventPublishSerializer::class)->serialize(clone $command->event);
 
-        $model          = new Event();
-        $model->payload = $data;
-        $model->id      = Str::uuid()->toString();
-        $model->channel = $command->event->getChannel();
+        $model           = new Event();
+        $model->payload  = $data;
+        $model->event_id = Str::uuid()->toString();
+        $model->channel  = $command->event->getChannel();
 
         $this->eventRepository->persist($model);
 

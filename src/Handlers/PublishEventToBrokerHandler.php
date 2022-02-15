@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace Ludovicose\TransactionOutbox\Handlers;
 
 use Ludovicose\TransactionOutbox\Commands\PublishEventToBrokerCommand;
+use Ludovicose\TransactionOutbox\Contracts\EventPublishSerializer;
 use Ludovicose\TransactionOutbox\Contracts\MessageBroker;
 use Ludovicose\TransactionOutbox\Events\EventPublished;
 
@@ -18,7 +19,7 @@ final class PublishEventToBrokerHandler
 
     public function handle(PublishEventToBrokerCommand $command)
     {
-        $this->messageBroker->publish($command->eventModel->getChannel(), $command->eventModel->getPayload());
+        $this->messageBroker->publish($command->eventModel->getChannel(), $command->eventModel->toJson());
 
         event(new EventPublished($command->eventModel->getId()));
     }
