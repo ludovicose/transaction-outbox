@@ -19,7 +19,8 @@ final class SaveRequestSendingListener
             'url'     => $event->request->url(),
         ];
 
-        $requestId = Str::uuid()->toString();
+        $requestId = $event->request->data()['request_id'] ?? Str::uuid()->toString();
+
         $event->request->withData(['request_id' => $requestId]);
 
         dispatch(new CreateRequestSendingCommand($requestId, $data));

@@ -16,7 +16,7 @@ final class CreateRequestSendingHandler
 
     public function handle(CreateRequestSendingCommand $command)
     {
-        $model           = new Event();
+        $model           = $this->eventRepository->findBy($command->requestId, Event::TYPE_REQUEST) ?? new Event();
         $model->event_id = $command->requestId;
         $model->payload  = json_encode($command->data);
         $model->type     = Event::TYPE_REQUEST;

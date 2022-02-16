@@ -7,9 +7,10 @@ namespace Ludovicose\TransactionOutbox\Repositories;
 use Illuminate\Support\Collection;
 use Ludovicose\TransactionOutbox\Contracts\EventRepository as EventRepositoryContract;
 use Ludovicose\TransactionOutbox\Contracts\RePublishEventRepository;
+use Ludovicose\TransactionOutbox\Contracts\ReSendRequestRepository;
 use Ludovicose\TransactionOutbox\Models\Event;
 
-final class EloquentEventRepository implements EventRepositoryContract, RePublishEventRepository
+final class EloquentEventRepository implements EventRepositoryContract, RePublishEventRepository, ReSendRequestRepository
 {
     public function persist(Event $event): void
     {
@@ -25,6 +26,14 @@ final class EloquentEventRepository implements EventRepositoryContract, RePublis
     public function getNotPublishEventBy(string $startDate, string $endDate): Collection
     {
         return Event::where('type', Event::TYPE_PUBLISH)
+            ->whereNull('success_at')
+            ->whereBetween('created_at', [$startDate, $endDate])
+            ->get();
+    }
+
+    public function getNotSendRequestBy(string $startDate, string $endDate): Collection
+    {
+        return Event::where('type', Event::TYPE_REQUEST)
             ->whereNull('success_at')
             ->whereBetween('created_at', [$startDate, $endDate])
             ->get();
