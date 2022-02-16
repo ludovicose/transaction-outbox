@@ -31,8 +31,8 @@ final class CreateSubscribeEventHandler
         event($event->getChannel(), json_decode($event->getPayload()));
     }
 
-    private function hasEvent(Event $event): ?Event
+    private function hasEvent(Event $event): bool
     {
-        return $this->eventRepository->findBy($event->event_id, Event::TYPE_SUBSCRIBE);
+        return !is_null($this->eventRepository->findBy($event->event_id, Event::TYPE_SUBSCRIBE));
     }
 }
