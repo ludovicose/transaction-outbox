@@ -19,4 +19,8 @@ return [
     ],
 
     'broker' => RedisBroker::class,
+
+    'subscribe_channels' => [
+        'test'
+    ]
 ];

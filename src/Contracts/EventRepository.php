@@ -10,5 +10,5 @@ interface EventRepository
 {
     public function persist(Event $event): void;
 
-    public function findBy(string $id, string $type): Event;
+    public function findBy(string $id, string $type): ?Event;
 }

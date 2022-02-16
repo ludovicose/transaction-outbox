@@ -16,13 +16,23 @@ final class CreateSubscribeEventHandler
 
     public function handle(CreateSubscribeEventCommand $command)
     {
-        $data        = json_decode($command->message, true);
-        $model       = new Event($data);
-        $model->type = Event::TYPE_SUBSCRIBE;
-        $model->setSuccessEvent();
+        $data  = json_decode($command->message, true);
+        $event = new Event($data);
 
-        $this->eventRepository->persist($model);
+        if ($this->hasEvent($event)) {
+            return;
+        }
 
-        event($model->getChannel(), json_decode($model->getPayload()));
+        $event->type = Event::TYPE_SUBSCRIBE;
+        $event->setSuccessEvent();
+
+        $this->eventRepository->persist($event);
+
+        event($event->getChannel(), json_decode($event->getPayload()));
+    }
+
+    private function hasEvent(Event $event): ?Event
+    {
+        return $this->eventRepository->findBy($event->event_id, Event::TYPE_SUBSCRIBE);
     }
 }

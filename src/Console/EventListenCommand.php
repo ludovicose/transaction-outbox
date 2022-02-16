@@ -16,13 +16,12 @@ final class EventListenCommand extends Command
 
     private MessageBroker $broker;
 
-    protected array $channels = [
-        'test'
-    ];
+    protected array $channels = [];
 
     public function __construct(MessageBroker $broker)
     {
-        $this->broker = $broker;
+        $this->broker   = $broker;
+        $this->channels = config('transaction-outbox.subscribe_channels');
         parent::__construct();
     }
 
