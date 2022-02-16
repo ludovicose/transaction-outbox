@@ -39,4 +39,9 @@ class Event extends Model
     {
         $this->success_at = now();
     }
+
+    public function getTable()
+    {
+        return config('transaction-outbox.table_name', parent::getTable());
+    }
 }

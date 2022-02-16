@@ -6,7 +6,7 @@ namespace Ludovicose\TransactionOutbox\Commands;
 
 final class SetSuccessEventCommand
 {
-    public function __construct(public string $id)
+    public function __construct(public string $id, public string $type)
     {
     }
 }

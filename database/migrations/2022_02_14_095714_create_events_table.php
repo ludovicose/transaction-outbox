@@ -15,12 +15,17 @@ class CreateEventsTable extends Migration
     {
         $tableName = config('transaction-outbox.table_name');
 
-        if (empty($tableNames)) {
+        if (empty($tableName)) {
             throw new \Exception('Error: config/transaction-outbox.php not loaded. Run [php artisan config:clear] and try again.');
         }
 
         Schema::create($tableName, function (Blueprint $table) {
             $table->id();
+            $table->uuid('event_id');
+            $table->text('payload');
+            $table->string('channel');
+            $table->string('type');
+            $table->dateTime('success_at')->nullable();
             $table->timestamps();
         });
     }
@@ -32,6 +37,12 @@ class CreateEventsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('events');
+        $tableName = config('transaction-outbox.table_name');
+
+        if (empty($tableName)) {
+            throw new \Exception('Error: config/transaction-outbox.php not loaded. Run [php artisan config:clear] and try again.');
+        }
+
+        Schema::dropIfExists($tableName);
     }
 }

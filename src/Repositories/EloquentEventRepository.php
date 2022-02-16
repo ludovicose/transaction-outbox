@@ -11,10 +11,12 @@ final class EloquentEventRepository implements EventRepositoryContract
 {
     public function persist(Event $event): void
     {
+        $event->saveOrFail();
     }
 
-    public function findByEventId(string $id): Event
+    public function findBy(string $id, string $type): Event
     {
-        // TODO: Implement findById() method.
+        return Event::where('event_id', $id)
+            ->where('type', $type)->first();
     }
 }
