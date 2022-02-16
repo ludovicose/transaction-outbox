@@ -10,7 +10,7 @@ use Ludovicose\TransactionOutbox\Contracts\MessageBroker;
 
 final class EventListenCommand extends Command
 {
-    protected $signature = 'event:listen';
+    protected $signature = 'events:listen';
 
     protected $description = 'Listen to events with this command';
 

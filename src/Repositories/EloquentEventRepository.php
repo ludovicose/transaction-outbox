@@ -4,13 +4,15 @@ declare(strict_types=1);
 
 namespace Ludovicose\TransactionOutbox\Repositories;
 
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
+use Ludovicose\TransactionOutbox\Contracts\EventDeleteRepository;
 use Ludovicose\TransactionOutbox\Contracts\EventRepository as EventRepositoryContract;
 use Ludovicose\TransactionOutbox\Contracts\RePublishEventRepository;
 use Ludovicose\TransactionOutbox\Contracts\ReSendRequestRepository;
 use Ludovicose\TransactionOutbox\Models\Event;
 
-final class EloquentEventRepository implements EventRepositoryContract, RePublishEventRepository, ReSendRequestRepository
+final class EloquentEventRepository implements EventRepositoryContract, RePublishEventRepository, ReSendRequestRepository, EventDeleteRepository
 {
     public function persist(Event $event): void
     {
@@ -37,5 +39,13 @@ final class EloquentEventRepository implements EventRepositoryContract, RePublis
             ->whereNull('success_at')
             ->whereBetween('created_at', [$startDate, $endDate])
             ->get();
+    }
+
+    public function deleteLastEvent(int $day): void
+    {
+        $date = Carbon::now()->subDays($day);
+
+        Event::whereDate('created_at', '<', $date)
+            ->delete();
     }
 }

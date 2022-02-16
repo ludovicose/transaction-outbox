@@ -6,9 +6,11 @@ namespace Ludovicose\TransactionOutbox;
 
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\ServiceProvider;
+use Ludovicose\TransactionOutbox\Console\EventClearCommand;
 use Ludovicose\TransactionOutbox\Console\EventListenCommand;
 use Ludovicose\TransactionOutbox\Console\EventRepeatCommand;
 use Ludovicose\TransactionOutbox\Console\RequestRepeatCommand;
+use Ludovicose\TransactionOutbox\Contracts\EventDeleteRepository;
 use Ludovicose\TransactionOutbox\Contracts\EventPublishSerializer;
 use Ludovicose\TransactionOutbox\Contracts\EventRepository;
 use Ludovicose\TransactionOutbox\Contracts\MessageBroker;
@@ -32,6 +34,7 @@ class PackageServiceProvider extends ServiceProvider
         $this->app->bind(EventRepository::class, config('transaction-outbox.event_repository'));
         $this->app->bind(RePublishEventRepository::class, config('transaction-outbox.event_repository'));
         $this->app->bind(ReSendRequestRepository::class, config('transaction-outbox.event_repository'));
+        $this->app->bind(EventDeleteRepository::class, config('transaction-outbox.event_repository'));
         $this->app->bind(EventPublishSerializer::class, config('transaction-outbox.event_publish_serialize'));
         $this->app->bind(MessageBroker::class, config('transaction-outbox.broker'));
 
@@ -39,6 +42,7 @@ class PackageServiceProvider extends ServiceProvider
             EventListenCommand::class,
             EventRepeatCommand::class,
             RequestRepeatCommand::class,
+            EventClearCommand::class,
         ]);
 
         $this->loadMigrationsFrom(__DIR__ . '/../database/migrations');

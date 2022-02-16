@@ -10,7 +10,7 @@ use Ludovicose\TransactionOutbox\Commands\RePublishEventCommand;
 
 final class EventRepeatCommand extends Command
 {
-    protected $signature = 'event:repeat
+    protected $signature = 'events:repeat
         {startDate : Date from the beginning of which you want to resend in Y-m-d format}
         {endDate? : Date before which you need to resend in the format Y-m-d}';
 

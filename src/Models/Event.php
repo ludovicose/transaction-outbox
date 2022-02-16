@@ -15,6 +15,9 @@ class Event extends Model
         'type',
     ];
 
+    protected $primaryKey = null;
+    public $incrementing = false;
+
     const TYPE_PUBLISH = 'publish';
     const TYPE_SUBSCRIBE = 'subscribe';
     const TYPE_REQUEST = 'request';

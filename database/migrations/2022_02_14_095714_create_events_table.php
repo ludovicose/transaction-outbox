@@ -20,7 +20,6 @@ class CreateEventsTable extends Migration
         }
 
         Schema::create($tableName, function (Blueprint $table) {
-            $table->id();
             $table->uuid('event_id');
             $table->text('payload');
             $table->string('channel');

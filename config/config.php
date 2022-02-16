@@ -8,9 +8,10 @@ use Symfony\Component\Serializer\Normalizer\DateTimeNormalizer;
 use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
 
 return [
-    'table_name'              => 'events',
-    'event_repository'        => EloquentEventRepository::class,
-    'event_publish_serialize' => JsonEventPublishSerializer::class,
+    'table_name'               => 'events',
+    'delete_last_event_in_day' => 30,
+    'event_repository'         => EloquentEventRepository::class,
+    'event_publish_serialize'  => JsonEventPublishSerializer::class,
 
     'event_normalizers' => [
         DateTimeNormalizer::class,
