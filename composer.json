@@ -1,6 +1,13 @@
 {
     "name": "ludovicose/transaction-outbox",
-    "type": "library",
+    "description": "Laravel Pub-Sub package use transactional outbox pattern",
+    "keywords": [
+        "laravel",
+        "pub-sub",
+        "transactional-outbox"
+    ],
+    "license": "MIT",
+    "homepage": "https://github.com/ludovicose/transaction-outbox",
     "autoload": {
         "psr-4": {
             "Ludovicose\\TransactionOutbox\\": "src/"
@@ -12,7 +19,6 @@
             "email": "aibek.muratbekov@gmail.com"
         }
     ],
-    "minimum-stability": "dev",
     "require": {
         "php": "^8.1",
         "symfony/serializer": "^6.0",
