@@ -10,8 +10,19 @@ use Ludovicose\TransactionOutbox\Models\Event;
 
 final class SetRequestIsSuccessListener
 {
+    private bool $enableRequest;
+
+    public function __construct()
+    {
+        $this->enableRequest = config('transaction-outbox.enable_request_log', true);
+    }
+
     public function handle(ResponseReceived $event)
     {
+        if (!$this->enableRequest) {
+            return;
+        }
+
         $requestId = $event->request->data()['request_id'];
 
         dispatch(new SetSuccessEventCommand($requestId, Event::TYPE_REQUEST));

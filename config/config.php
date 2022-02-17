@@ -23,5 +23,6 @@ return [
 
     'subscribe_channels' => [
         'test'
-    ]
+    ],
+    'enable_request_log' => true,
 ];
