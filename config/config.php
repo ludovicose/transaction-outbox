@@ -9,7 +9,7 @@ use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
 
 return [
     'table_name'               => 'events',
-    'delete_last_event_in_day' => 30,
+    'delete_last_event_in_day' => 10,
     'event_repository'         => EloquentEventRepository::class,
     'event_publish_serialize'  => JsonEventPublishSerializer::class,
 
@@ -24,5 +24,6 @@ return [
     'subscribe_channels' => [
         'test'
     ],
+
     'enable_request_log' => true,
 ];
