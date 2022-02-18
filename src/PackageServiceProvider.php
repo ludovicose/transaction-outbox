@@ -51,5 +51,16 @@ class PackageServiceProvider extends ServiceProvider
     public function boot()
     {
         Event::subscribe(EventSubscriber::class);
+
+        if ($this->app->runningInConsole()) {
+            $this->publishes([
+                __DIR__ . '/../config/config.php' => config_path('transaction-outbox.php'),
+            ], 'config');
+
+
+            $this->publishes([
+                __DIR__.'/../database/migrations/' => database_path('migrations')
+            ], 'migrations');
+        }
     }
 }
