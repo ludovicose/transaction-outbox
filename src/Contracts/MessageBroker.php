@@ -8,7 +8,7 @@ use Closure;
 
 interface MessageBroker
 {
-    public function publish(string $channel, string $body): void;
+    public function publish(string $channelName, string $body): void;
 
     public function subscribe($channels, Closure $closure): void;
 }

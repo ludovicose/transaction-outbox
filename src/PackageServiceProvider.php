@@ -6,6 +6,8 @@ namespace Ludovicose\TransactionOutbox;
 
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\ServiceProvider;
+use Ludovicose\TransactionOutbox\Brokers\Rabbit\Message;
+use Ludovicose\TransactionOutbox\Brokers\RabbitMQBroker;
 use Ludovicose\TransactionOutbox\Console\EventClearCommand;
 use Ludovicose\TransactionOutbox\Console\EventListenCommand;
 use Ludovicose\TransactionOutbox\Console\EventRepeatCommand;
@@ -19,6 +21,10 @@ use Ludovicose\TransactionOutbox\Contracts\ReSendRequestRepository;
 use Ludovicose\TransactionOutbox\Listeners\EventSubscriber;
 use Ludovicose\TransactionOutbox\Providers\CommandBusServiceProvider;
 use Ludovicose\TransactionOutbox\Providers\EventServiceProvider;
+use PhpAmqpLib\Connection\AbstractConnection;
+use PhpAmqpLib\Connection\AMQPLazyConnection;
+use PhpAmqpLib\Connection\AMQPStreamConnection;
+use PhpAmqpLib\Message\AMQPMessage;
 
 class PackageServiceProvider extends ServiceProvider
 {
@@ -37,6 +43,12 @@ class PackageServiceProvider extends ServiceProvider
         $this->app->bind(EventDeleteRepository::class, config('transaction-outbox.event_repository'));
         $this->app->bind(EventPublishSerializer::class, config('transaction-outbox.event_publish_serialize'));
         $this->app->bind(MessageBroker::class, config('transaction-outbox.broker'));
+
+        $this->app->bind(AbstractConnection::class, function ($app) {
+            $connection = config('transaction-outbox.rabbitmq.hosts');
+            $options    = config('transaction-outbox.rabbitmq.options');
+            return AMQPLazyConnection::create_connection($connection, $options);
+        });
 
         $this->commands([
             EventListenCommand::class,
@@ -58,7 +70,7 @@ class PackageServiceProvider extends ServiceProvider
             ], 'config');
 
             $this->publishes([
-                __DIR__.'/../database/migrations/' => database_path('migrations')
+                __DIR__ . '/../database/migrations/' => database_path('migrations')
             ], 'migrations');
         }
     }
