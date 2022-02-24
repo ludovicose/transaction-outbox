@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace Ludovicose\TransactionOutbox\Handlers;
@@ -10,7 +11,6 @@ final class DeleteEventInLastDayHandler
 {
     public function __construct(public EventDeleteRepository $repository)
     {
-
     }
 
     public function handle(DeleteEventInLastDayCommand $command)

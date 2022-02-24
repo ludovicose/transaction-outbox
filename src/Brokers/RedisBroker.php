@@ -19,10 +19,10 @@ class RedisBroker implements MessageBroker
         $this->service = $redisManager;
     }
 
-    public function publish(string $channel, string $body): void
+    public function publish(string $channelName, string $body): void
     {
         try {
-            $this->service->publish($channel, $body);
+            $this->service->publish($channelName, $body);
         } catch (Throwable $e) {
             throw new PublishException($e->getMessage(), $e->getCode(), $e);
         }
