@@ -13,28 +13,21 @@ use PhpAmqpLib\Message\AMQPMessage;
 final class RabbitMQBroker implements MessageBroker
 {
     private AbstractConnection $connection;
-    private string $exchange;
+    private string $serviceName;
     private string $type;
 
     public function __construct(AbstractConnection $connection)
     {
-        $this->connection = $connection;
-        $this->exchange   = config('transaction-outbox.rabbitmq.default_exchange', '');
-        $this->type       = config('transaction-outbox.rabbitmq.default_type', 'fanout');
+        $this->connection  = $connection;
+        $this->serviceName = config('transaction-outbox.rabbitmq.serviceName', '');
+        $this->type        = config('transaction-outbox.rabbitmq.default_type', 'fanout');
     }
 
     public function publish(string $channelName, string $body): void
     {
         $channel = $this->connection->channel();
-        [$queue, $exchange] = $this->getExchangeAndQueue($channelName);
 
-        $channel->queue_declare(
-            $queue,
-            false,
-            true,
-            false,
-            false
-        );
+        $exchange = $this->getExchange($channelName);
 
         $channel->exchange_declare(
             $exchange,
@@ -56,7 +49,7 @@ final class RabbitMQBroker implements MessageBroker
         $channel = $this->connection->channel();
 
         foreach ($channels as $channelName) {
-            [$queue, $exchange] = $this->getExchangeAndQueue($channelName);
+            $queue = $this->getQueue($channelName);
 
             $channel->queue_declare(
                 $queue,
@@ -67,14 +60,14 @@ final class RabbitMQBroker implements MessageBroker
             );
 
             $channel->exchange_declare(
-                $exchange,
+                $channelName,
                 $this->type,
                 false,
                 true,
                 false
             );
 
-            $channel->queue_bind($queue, $exchange);
+            $channel->queue_bind($queue, $channelName);
 
             $channel->basic_consume(
                 $queue,
@@ -96,15 +89,13 @@ final class RabbitMQBroker implements MessageBroker
     }
 
 
-    private function getExchangeAndQueue(string $channelName): array
+    private function getExchange(string $channelName): string
     {
-        $queue    = $channelName;
-        $exchange = $this->exchange;
+        return "{$this->serviceName}.{$channelName}";
+    }
 
-        if (Str::contains($channelName, '.')) {
-            [$exchange, $queue] = Str::of($channelName)->explode('.');
-        }
-
-        return [$queue, $exchange];
+    private function getQueue($channelName): string
+    {
+        return "{$this->serviceName}.{$channelName}";
     }
 }

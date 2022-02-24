@@ -23,16 +23,16 @@ return [
     'broker' => RabbitMQBroker::class,
 
     'subscribe_channels' => [
-        'cabinet.user_created',
-        'cabinet.user_updated',
-        'cabinet.user_deleted',
+        'packages.cabinet.user_created',
+        'packages.cabinet.user_updated',
+        'packages.cabinet.user_deleted',
     ],
 
     'enable_request_log' => true,
 
     'rabbitmq' => [
-        'default_exchange' => env("DEFAULT_EXCHANGE", ''),
-        'default_type'     => 'fanout',
+        'serviceName'  => env("SERVICE_NAME", 'packages'),
+        'default_type' => 'fanout',
 
         'hosts' => [
             [
