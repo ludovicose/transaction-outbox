@@ -4,11 +4,8 @@ declare(strict_types=1);
 
 namespace Ludovicose\TransactionOutbox;
 
-use Illuminate\Redis\RedisManager;
-use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\ServiceProvider;
-use Illuminate\Support\Str;
 use Ludovicose\TransactionOutbox\Console\EventClearCommand;
 use Ludovicose\TransactionOutbox\Console\EventListenCommand;
 use Ludovicose\TransactionOutbox\Console\EventRepeatCommand;
