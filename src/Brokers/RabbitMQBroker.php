@@ -19,7 +19,7 @@ final class RabbitMQBroker implements MessageBroker
     public function __construct(AbstractConnection $connection)
     {
         $this->connection  = $connection;
-        $this->serviceName = config('transaction-outbox.rabbitmq.serviceName', '');
+        $this->serviceName = config('transaction-outbox.serviceName', '');
         $this->type        = config('transaction-outbox.rabbitmq.default_type', 'fanout');
     }
 

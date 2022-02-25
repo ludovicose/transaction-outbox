@@ -4,10 +4,11 @@ declare(strict_types=1);
 
 namespace Ludovicose\TransactionOutbox;
 
+use Illuminate\Redis\RedisManager;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\ServiceProvider;
-use Ludovicose\TransactionOutbox\Brokers\Rabbit\Message;
-use Ludovicose\TransactionOutbox\Brokers\RabbitMQBroker;
+use Illuminate\Support\Str;
 use Ludovicose\TransactionOutbox\Console\EventClearCommand;
 use Ludovicose\TransactionOutbox\Console\EventListenCommand;
 use Ludovicose\TransactionOutbox\Console\EventRepeatCommand;
@@ -23,8 +24,6 @@ use Ludovicose\TransactionOutbox\Providers\CommandBusServiceProvider;
 use Ludovicose\TransactionOutbox\Providers\EventServiceProvider;
 use PhpAmqpLib\Connection\AbstractConnection;
 use PhpAmqpLib\Connection\AMQPLazyConnection;
-use PhpAmqpLib\Connection\AMQPStreamConnection;
-use PhpAmqpLib\Message\AMQPMessage;
 
 class PackageServiceProvider extends ServiceProvider
 {
@@ -49,6 +48,7 @@ class PackageServiceProvider extends ServiceProvider
             $options    = config('transaction-outbox.rabbitmq.options');
             return AMQPLazyConnection::create_connection($connection, $options);
         });
+
 
         $this->commands([
             EventListenCommand::class,

@@ -27,9 +27,9 @@ return [
     ],
 
     'enable_request_log' => true,
+    'serviceName'        => env("SERVICE_NAME", 'serviceName'),
 
     'rabbitmq' => [
-        'serviceName'  => env("SERVICE_NAME", 'serviceName'),
         'default_type' => 'fanout',
 
         'hosts' => [
