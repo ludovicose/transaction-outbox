@@ -27,7 +27,7 @@ final class RabbitMQBroker implements MessageBroker
     {
         $channel = $this->connection->channel();
 
-        $exchange = $this->getExchange($channelName);
+        $exchange = $channelName;
 
         $channel->exchange_declare(
             $exchange,
@@ -49,7 +49,7 @@ final class RabbitMQBroker implements MessageBroker
         $channel = $this->connection->channel();
 
         foreach ($channels as $channelName) {
-            $queue = $this->getQueue($channelName);
+            $queue = $channelName;
 
             $channel->queue_declare(
                 $queue,
@@ -86,16 +86,5 @@ final class RabbitMQBroker implements MessageBroker
 
         $channel->close();
         $this->connection->close();
-    }
-
-
-    private function getExchange(string $channelName): string
-    {
-        return "{$this->serviceName}.{$channelName}";
-    }
-
-    private function getQueue($channelName): string
-    {
-        return "{$this->serviceName}.{$channelName}";
     }
 }

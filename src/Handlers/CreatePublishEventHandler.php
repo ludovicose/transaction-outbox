@@ -13,8 +13,11 @@ use Ludovicose\TransactionOutbox\Models\Event;
 
 final class CreatePublishEventHandler
 {
+    public string $serviceName;
+
     public function __construct(public EventRepository $eventRepository)
     {
+        $this->serviceName = config('transaction-outbox.serviceName', '');
     }
 
     public function handle(CreatePublishEventCommand $command)
@@ -24,7 +27,7 @@ final class CreatePublishEventHandler
         $model           = new Event();
         $model->payload  = $data;
         $model->event_id = Str::uuid()->toString();
-        $model->channel  = $command->event->getChannel();
+        $model->channel  = "{$this->serviceName}.{$command->event->getChannel()}";
         $model->type     = Event::TYPE_PUBLISH;
 
         $this->eventRepository->persist($model);
