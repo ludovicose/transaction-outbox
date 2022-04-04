@@ -31,8 +31,7 @@ return [
 
     'rabbitmq' => [
         'default_type' => 'fanout',
-
-        'hosts' => [
+        'hosts'        => [
             [
                 'host'     => env('RABBITMQ_HOST', 'rabbitmq'),
                 'port'     => env('RABBITMQ_PORT', 5672),

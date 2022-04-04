@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Ludovicose\TransactionOutbox;
 
+use Illuminate\Queue\QueueManager;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\ServiceProvider;
 use Ludovicose\TransactionOutbox\Console\EventClearCommand;
@@ -19,6 +20,7 @@ use Ludovicose\TransactionOutbox\Contracts\ReSendRequestRepository;
 use Ludovicose\TransactionOutbox\Listeners\EventSubscriber;
 use Ludovicose\TransactionOutbox\Providers\CommandBusServiceProvider;
 use Ludovicose\TransactionOutbox\Providers\EventServiceProvider;
+use Ludovicose\TransactionOutbox\Queue\Connectors\RabbitMQConnector;
 use PhpAmqpLib\Connection\AbstractConnection;
 use PhpAmqpLib\Connection\AMQPLazyConnection;
 
@@ -60,6 +62,13 @@ class PackageServiceProvider extends ServiceProvider
     public function boot()
     {
         Event::subscribe(EventSubscriber::class);
+
+        /**@var QueueManager $queue*/
+        $queue = $this->app['queue'];
+
+        $queue->addConnector('rabbitmq', function () {
+            return new RabbitMQConnector($this->app['events']);
+        });
 
         if ($this->app->runningInConsole()) {
             $this->publishes([
