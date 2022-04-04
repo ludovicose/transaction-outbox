@@ -26,7 +26,7 @@ return [
 //        'serviceName.exchange.eventName',
     ],
 
-    'enable_request_log' => true,
+    'enable_request_log' => false,
     'serviceName'        => env("SERVICE_NAME", 'serviceName'),
 
     'rabbitmq' => [
