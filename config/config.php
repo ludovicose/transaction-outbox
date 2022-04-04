@@ -26,13 +26,12 @@ return [
 //        'serviceName.exchange.eventName',
     ],
 
-    'enable_request_log' => true,
+    'enable_request_log' => false,
     'serviceName'        => env("SERVICE_NAME", 'serviceName'),
 
     'rabbitmq' => [
         'default_type' => 'fanout',
-
-        'hosts' => [
+        'hosts'        => [
             [
                 'host'     => env('RABBITMQ_HOST', 'rabbitmq'),
                 'port'     => env('RABBITMQ_PORT', 5672),

@@ -12,7 +12,6 @@ use Ludovicose\TransactionOutbox\Events\EventPublished;
 use Ludovicose\TransactionOutbox\Events\PublishEventCreated;
 use Ludovicose\TransactionOutbox\Listeners\EventPublishSuccessfullyListener;
 use Ludovicose\TransactionOutbox\Listeners\PublishEventListener;
-use Ludovicose\TransactionOutbox\Listeners\RequestSendingListener;
 use Ludovicose\TransactionOutbox\Listeners\SaveRequestSendingListener;
 use Ludovicose\TransactionOutbox\Listeners\SetRequestIsSuccessListener;
 

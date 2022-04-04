@@ -186,6 +186,27 @@ return [
 
 ```
 
+## QUEUE
+
+Add queue.php config rabbitmq
+
+```php
+return [
+    ...
+    'connections' => [
+        ... 
+         'rabbitmq' => [
+            'driver'     => 'rabbitmq',
+            'connection' => 'default',
+            'queue'      => env('RABBITMQ_QUEUE', 'default'),
+        ],
+        ... 
+    ]   
+    ...
+];
+
+```
+
 ## License
 
 The MIT License (MIT). Please see [License File](LICENSE.md) for more information.
