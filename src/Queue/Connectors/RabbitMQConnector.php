@@ -48,8 +48,6 @@ final class RabbitMQConnector implements ConnectorInterface
 
     protected function createQueue(string $worker, AbstractConnection $connection, string $queue, array $options = [])
     {
-        $queue = QueueName::getName($queue);
-
         switch ($worker) {
             case 'default':
                 return new RabbitMQQueue($connection, $queue, $options);
