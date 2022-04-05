@@ -10,7 +10,6 @@ use Illuminate\Queue\Connectors\ConnectorInterface;
 use Illuminate\Queue\Events\WorkerStopping;
 use Illuminate\Support\Arr;
 use InvalidArgumentException;
-use Ludovicose\TransactionOutbox\Queue\QueueName;
 use Ludovicose\TransactionOutbox\Queue\RabbitMQQueue;
 use PhpAmqpLib\Connection\AbstractConnection;
 
