@@ -49,7 +49,7 @@ final class RabbitMQBroker implements MessageBroker
         $channel = $this->connection->channel();
 
         foreach ($channels as $channelName) {
-            $queue = $channelName;
+            $queue = $this->getQueue($channelName);
 
             $channel->queue_declare(
                 $queue,
@@ -86,5 +86,10 @@ final class RabbitMQBroker implements MessageBroker
 
         $channel->close();
         $this->connection->close();
+    }
+
+    private function getQueue($channelName): string
+    {
+        return "{$this->serviceName}.{$channelName}";
     }
 }
