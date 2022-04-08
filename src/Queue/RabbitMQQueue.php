@@ -31,15 +31,16 @@ class RabbitMQQueue extends \Illuminate\Queue\Queue implements Queue
 
     protected array $boundQueues = [];
 
-    protected RabbitMQJob $currentJob;
+    protected ?RabbitMQJob $currentJob = null;
 
     protected array $options;
 
     public function __construct(
         AbstractConnection $connection,
-        string $default,
-        array $options = []
-    ) {
+        string             $default,
+        array              $options = []
+    )
+    {
         $this->connection = $connection;
         $this->channel    = $connection->channel();
         $this->default    = $default;
@@ -229,10 +230,11 @@ class RabbitMQQueue extends \Illuminate\Queue\Queue implements Queue
     public function declareExchange(
         string $name,
         string $type = AMQPExchangeType::DIRECT,
-        bool $durable = true,
-        bool $autoDelete = false,
-        array $arguments = []
-    ): void {
+        bool   $durable = true,
+        bool   $autoDelete = false,
+        array  $arguments = []
+    ): void
+    {
         if ($this->isExchangeDeclared($name)) {
             return;
         }
@@ -286,10 +288,11 @@ class RabbitMQQueue extends \Illuminate\Queue\Queue implements Queue
 
     public function declareQueue(
         string $name,
-        bool $durable = true,
-        bool $autoDelete = false,
-        array $arguments = []
-    ): void {
+        bool   $durable = true,
+        bool   $autoDelete = false,
+        array  $arguments = []
+    ): void
+    {
         if ($this->isQueueDeclared($name)) {
             return;
         }
@@ -473,9 +476,9 @@ class RabbitMQQueue extends \Illuminate\Queue\Queue implements Queue
     protected function getExchangeType(?string $type = null): string
     {
         return @constant(AMQPExchangeType::class . '::' . Str::upper($type ?: Arr::get(
-            $this->options,
-            'exchange_type'
-        ) ?: 'direct')) ?: AMQPExchangeType::DIRECT;
+                $this->options,
+                'exchange_type'
+            ) ?: 'direct')) ?: AMQPExchangeType::DIRECT;
     }
 
 
@@ -515,10 +518,11 @@ class RabbitMQQueue extends \Illuminate\Queue\Queue implements Queue
 
 
     protected function declareDestination(
-        string $destination,
+        string  $destination,
         ?string $exchange = null,
-        string $exchangeType = AMQPExchangeType::DIRECT
-    ): void {
+        string  $exchangeType = AMQPExchangeType::DIRECT
+    ): void
+    {
         if ($exchange && !$this->isExchangeExists($exchange)) {
             $this->declareExchange($exchange, $exchangeType);
         }
