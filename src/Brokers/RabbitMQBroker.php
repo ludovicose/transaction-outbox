@@ -5,10 +5,13 @@ declare(strict_types=1);
 namespace Ludovicose\TransactionOutbox\Brokers;
 
 use Closure;
+use Exception;
 use Illuminate\Support\Str;
 use Ludovicose\TransactionOutbox\Contracts\MessageBroker;
 use PhpAmqpLib\Connection\AbstractConnection;
+use PhpAmqpLib\Exception\AMQPHeartbeatMissedException;
 use PhpAmqpLib\Message\AMQPMessage;
+use Throwable;
 
 final class RabbitMQBroker implements MessageBroker
 {
@@ -81,7 +84,13 @@ final class RabbitMQBroker implements MessageBroker
         }
 
         while ($channel->is_open()) {
-            $channel->wait();
+            try {
+                $channel->wait();
+            } catch (Exception|Throwable) {
+                $channel->close();
+                $this->connection->close();
+                exit(1);
+            }
         }
 
         $channel->close();
