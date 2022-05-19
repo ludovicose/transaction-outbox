@@ -23,7 +23,7 @@ return [
     'broker' => RabbitMQBroker::class,
 
     'subscribe_channels' => [
-//        'serviceName.exchange.eventName',
+        'serviceName.exchange.eventName',
     ],
 
     'enable_request_log' => false,
