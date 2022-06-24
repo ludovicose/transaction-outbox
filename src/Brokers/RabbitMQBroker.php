@@ -95,6 +95,7 @@ final class RabbitMQBroker implements MessageBroker
 
         $channel->close();
         $this->connection->close();
+        exit(1);
     }
 
     private function getQueue($channelName): string
