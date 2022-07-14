@@ -13,8 +13,8 @@ final class MemoryEventRepository implements EventRepositoryContract
     {
     }
 
-    public function findBy(string $id, string $type): Event
+    public function findBy(string $id, string $type): ?Event
     {
-        return new Event();
+        return null;
     }
 }
