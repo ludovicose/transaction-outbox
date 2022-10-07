@@ -6,10 +6,9 @@ namespace Ludovicose\TransactionOutbox\Brokers;
 
 use Closure;
 use Exception;
-use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Log;
 use Ludovicose\TransactionOutbox\Contracts\MessageBroker;
 use PhpAmqpLib\Connection\AbstractConnection;
-use PhpAmqpLib\Exception\AMQPHeartbeatMissedException;
 use PhpAmqpLib\Message\AMQPMessage;
 use Throwable;
 
@@ -86,9 +85,11 @@ final class RabbitMQBroker implements MessageBroker
         while ($channel->is_open()) {
             try {
                 $channel->wait();
-            } catch (Exception|Throwable) {
+            } catch (Exception|Throwable $e) {
                 $channel->close();
                 $this->connection->close();
+                Log::error("Error consumer:", ['error' => $e]);
+
                 exit(1);
             }
         }
