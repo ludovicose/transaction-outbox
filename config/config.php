@@ -23,7 +23,7 @@ return [
     'broker' => RabbitMQBroker::class,
 
     'subscribe_channels' => [
-//        'serviceName.exchange.eventName',
+        'serviceName.exchange.eventName',
     ],
 
     'enable_request_log' => false,
@@ -31,6 +31,7 @@ return [
 
     'rabbitmq' => [
         'default_type' => 'fanout',
+        'timeout'      => 25,
         'hosts'        => [
             [
                 'host'     => env('RABBITMQ_HOST', 'rabbitmq'),
@@ -42,21 +43,8 @@ return [
         ],
 
         'options' => [
-            'ssl_options' => [
-                'cafile'      => env('RABBITMQ_SSL_CAFILE', null),
-                'local_cert'  => env('RABBITMQ_SSL_LOCALCERT', null),
-                'local_key'   => env('RABBITMQ_SSL_LOCALKEY', null),
-                'verify_peer' => env('RABBITMQ_SSL_VERIFY_PEER', true),
-                'passphrase'  => env('RABBITMQ_SSL_PASSPHRASE', null),
-            ],
-
             'message-ttl' => 0,
             'heartbeat'   => 60,
-
-            'queue' => [
-                'declare' => false,
-                'bind'    => false,
-            ],
         ],
     ]
 ];

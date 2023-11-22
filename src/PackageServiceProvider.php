@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Ludovicose\TransactionOutbox;
 
 use Illuminate\Queue\QueueManager;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\ServiceProvider;
 use Ludovicose\TransactionOutbox\Console\EventClearCommand;
@@ -22,7 +23,8 @@ use Ludovicose\TransactionOutbox\Providers\CommandBusServiceProvider;
 use Ludovicose\TransactionOutbox\Providers\EventServiceProvider;
 use Ludovicose\TransactionOutbox\Queue\Connectors\RabbitMQConnector;
 use PhpAmqpLib\Connection\AbstractConnection;
-use PhpAmqpLib\Connection\AMQPLazyConnection;
+use PhpAmqpLib\Connection\AMQPConnectionConfig;
+use PhpAmqpLib\Connection\AMQPConnectionFactory;
 
 class PackageServiceProvider extends ServiceProvider
 {
@@ -43,9 +45,19 @@ class PackageServiceProvider extends ServiceProvider
         $this->app->bind(MessageBroker::class, config('transaction-outbox.broker'));
 
         $this->app->bind(AbstractConnection::class, function ($app) {
-            $connection = config('transaction-outbox.rabbitmq.hosts');
+            $connectionConfig = config('transaction-outbox.rabbitmq.hosts');
             $options    = config('transaction-outbox.rabbitmq.options');
-            return AMQPLazyConnection::create_connection($connection, $options);
+
+            $connectionConfig = Arr::first($connectionConfig);
+            $config     = new AMQPConnectionConfig();
+            $config->setHost($connectionConfig['host']);
+            $config->setPort($connectionConfig['port']);
+            $config->setUser($connectionConfig['user']);
+            $config->setPassword($connectionConfig['password']);
+            $config->setVhost($connectionConfig['vhost']);
+            $config->setHeartbeat($options['heartbeat']);
+
+            return AMQPConnectionFactory::create($config);
         });
 
 
@@ -63,7 +75,7 @@ class PackageServiceProvider extends ServiceProvider
     {
         Event::subscribe(EventSubscriber::class);
 
-        /**@var QueueManager $queue*/
+        /**@var QueueManager $queue */
         $queue = $this->app['queue'];
 
         $queue->addConnector('rabbitmq', function () {

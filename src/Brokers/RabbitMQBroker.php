@@ -5,24 +5,28 @@ declare(strict_types=1);
 namespace Ludovicose\TransactionOutbox\Brokers;
 
 use Closure;
-use Exception;
-use Illuminate\Support\Facades\Log;
 use Ludovicose\TransactionOutbox\Contracts\MessageBroker;
+use Ludovicose\TransactionOutbox\Exceptions\TimeoutException;
 use PhpAmqpLib\Connection\AbstractConnection;
+use PhpAmqpLib\Exception\AMQPTimeoutException;
 use PhpAmqpLib\Message\AMQPMessage;
-use Throwable;
 
 final class RabbitMQBroker implements MessageBroker
 {
     private AbstractConnection $connection;
     private string $serviceName;
     private string $type;
+    /**
+     * @var \Illuminate\Config\Repository|\Illuminate\Contracts\Foundation\Application|mixed
+     */
+    private int $timeout;
 
     public function __construct(AbstractConnection $connection)
     {
         $this->connection  = $connection;
         $this->serviceName = config('transaction-outbox.serviceName', '');
         $this->type        = config('transaction-outbox.rabbitmq.default_type', 'fanout');
+        $this->timeout     = config('transaction-outbox.rabbitmq.timeout', 25);
     }
 
     public function publish(string $channelName, string $body): void
@@ -48,55 +52,62 @@ final class RabbitMQBroker implements MessageBroker
 
     public function subscribe($channels, Closure $closure): void
     {
-        $channel = $this->connection->channel();
-
-        foreach ($channels as $channelName) {
-            $queue = $this->getQueue($channelName);
-
-            $channel->queue_declare(
-                $queue,
-                false,
-                true,
-                false,
-                false
-            );
-
-            $channel->exchange_declare(
-                $channelName,
-                $this->type,
-                false,
-                true,
-                false
-            );
-
-            $channel->queue_bind($queue, $channelName);
-
-            $channel->basic_consume(
-                $queue,
-                '',
-                false,
-                true,
-                false,
-                false,
-                fn($msg) => $closure($msg->body)
-            );
-        }
-
-        while ($channel->is_open()) {
+        do {
             try {
-                $channel->wait();
-            } catch (Exception|Throwable $e) {
+                $channel = $this->connection->channel();
+
+                foreach ($channels as $channelName) {
+                    $queue = $this->getQueue($channelName);
+
+                    $channel->queue_declare(
+                        $queue,
+                        false,
+                        true,
+                        false,
+                        false
+                    );
+
+                    $channel->exchange_declare(
+                        $channelName,
+                        $this->type,
+                        false,
+                        true,
+                        false
+                    );
+
+                    $channel->queue_bind($queue, $channelName);
+
+                    $channel->basic_consume(
+                        $queue,
+                        '',
+                        false,
+                        true,
+                        false,
+                        false,
+                        function (AMQPMessage $msg) use ($closure) {
+                            $closure($msg->body);
+                        }
+                    );
+                }
+
+                while ($channel->is_open()) {
+                    try {
+                        $channel->wait(null, false, $this->timeout * 60);
+                    } catch (AMQPTimeoutException $exception) {
+                        $channel->close();
+                        $this->connection->close();
+                        throw new TimeoutException($exception->getMessage());
+                    }
+                }
+
                 $channel->close();
                 $this->connection->close();
-                Log::error("Error consumer:", ['error' => $e]);
+                exit(0);
 
-                exit(1);
+            } catch (TimeoutException $e) {
+                sleep(5);
             }
-        }
-
-        $channel->close();
-        $this->connection->close();
-        exit(1);
+        } while (true);
     }
 
     private function getQueue($channelName): string
