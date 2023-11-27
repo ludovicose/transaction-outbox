@@ -11,7 +11,7 @@ use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
 return [
     'table_name'               => 'events',
     'delete_last_event_in_day' => 10,
-    'event_repository'         => EloquentEventRepository::class,
+    'event_repository'         => \Ludovicose\TransactionOutbox\Repositories\MemoryEventRepository::class,
     'event_publish_serialize'  => JsonEventPublishSerializer::class,
 
     'event_normalizers' => [
@@ -20,10 +20,11 @@ return [
         ArrayDenormalizer::class,
     ],
 
-    'broker' => RabbitMQBroker::class,
+    'broker' => RedisBroker::class,
 
     'subscribe_channels' => [
         'serviceName.exchange.eventName',
+        'serviceName.order.created'
     ],
 
     'enable_request_log' => false,
@@ -32,6 +33,7 @@ return [
     'rabbitmq' => [
         'default_type' => 'fanout',
         'timeout'      => 25,
+        'error_queue' => 'errors',
         'hosts'        => [
             [
                 'host'     => env('RABBITMQ_HOST', 'rabbitmq'),
