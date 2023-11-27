@@ -24,8 +24,7 @@ return [
     'broker' => RabbitMQBroker::class,
 
     'subscribe_channels' => [
-        'serviceName.exchange.eventName',
-        'serviceName.order.created'
+//        'serviceName.exchange.eventName',
     ],
 
     'enable_request_log' => false,
@@ -34,7 +33,7 @@ return [
     'rabbitmq' => [
         'default_type' => 'fanout',
         'timeout'      => 3,
-        'error_queue' => 'errors',
+        'error_queue' => 'errors', // serviceName.errors
         'hosts'        => [
             [
                 'host'     => env('RABBITMQ_HOST', 'rabbitmq'),
