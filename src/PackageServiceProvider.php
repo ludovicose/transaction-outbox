@@ -12,6 +12,7 @@ use Ludovicose\TransactionOutbox\Console\EventClearCommand;
 use Ludovicose\TransactionOutbox\Console\EventListenCommand;
 use Ludovicose\TransactionOutbox\Console\EventRepeatCommand;
 use Ludovicose\TransactionOutbox\Console\RequestRepeatCommand;
+use Ludovicose\TransactionOutbox\Console\ReSendErrorsOutQueue;
 use Ludovicose\TransactionOutbox\Contracts\EventDeleteRepository;
 use Ludovicose\TransactionOutbox\Contracts\EventPublishSerializer;
 use Ludovicose\TransactionOutbox\Contracts\EventRepository;
@@ -66,6 +67,7 @@ class PackageServiceProvider extends ServiceProvider
             EventRepeatCommand::class,
             RequestRepeatCommand::class,
             EventClearCommand::class,
+            ReSendErrorsOutQueue::class
         ]);
 
         $this->loadMigrationsFrom(__DIR__ . '/../database/migrations');

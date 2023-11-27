@@ -108,7 +108,7 @@ final class RabbitMQBroker implements MessageBroker
                 while ($channel->is_open()) {
                     try {
                         $channel->wait(null, false, $this->timeout * 60);
-                    } catch (AMQPTimeoutException|AMQPHeartbeatMissedException $exception) {
+                    } catch (AMQPTimeoutException | AMQPHeartbeatMissedException $exception) {
                         $channel->close();
                         $this->connection->close();
                         throw new TimeoutException($exception->getMessage());
@@ -118,7 +118,6 @@ final class RabbitMQBroker implements MessageBroker
                 $channel->close();
                 $this->connection->close();
                 exit(0);
-
             } catch (TimeoutException) {
                 sleep(5);
             }
@@ -140,7 +139,8 @@ final class RabbitMQBroker implements MessageBroker
         }
 
         $channel->close();
-        $this->connection->close();;
+        $this->connection->close();
+        ;
     }
 
     private function getQueue($channelName): string
