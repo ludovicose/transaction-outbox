@@ -19,7 +19,7 @@ use PhpAmqpLib\Message\AMQPMessage;
 
 final class RabbitMQBroker implements MessageBroker
 {
-    public AbstractConnection $connection;
+    private AbstractConnection $connection;
     private string $serviceName;
     private string $type;
     /**
