@@ -52,7 +52,7 @@ class PackageServiceProvider extends ServiceProvider
             $connectionConfig = Arr::first($connectionConfig);
             $config     = new AMQPConnectionConfig();
             $config->setHost($connectionConfig['host']);
-            $config->setPort($connectionConfig['port']);
+            $config->setPort((int)$connectionConfig['port']);
             $config->setUser($connectionConfig['user']);
             $config->setPassword($connectionConfig['password']);
             $config->setVhost($connectionConfig['vhost']);
