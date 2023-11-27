@@ -62,7 +62,6 @@ class PackageServiceProvider extends ServiceProvider
             return AMQPConnectionFactory::create($config);
         });
 
-
         $this->commands([
             EventListenCommand::class,
             EventRepeatCommand::class,
