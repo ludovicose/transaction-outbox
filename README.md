@@ -166,6 +166,26 @@ If the http request failed, then it can be resent with the command below, specif
 $ php artisan request:repeat 2022-12-12
 ```
 
+### Resend erroneous data from the queue
+
+If we get an error while processing data from the queue, then this data goes to the queue (serviceName.errors).
+
+To resend data from the queue (serviceName.errors) we need to run the command:
+```bash
+$ php artisan events:resend-errors
+```
+
+In the configuration file you can specify the name of the queue where the errors will be stored
+
+```php
+return [
+    ...
+    'error_queue' => 'errors'
+    ...
+];
+
+```
+
 ### Clear event in DB
 
 If you do not clean the database from the event, then the entries in the database can increase. To clean up old entries,
