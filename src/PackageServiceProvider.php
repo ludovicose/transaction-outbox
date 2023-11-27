@@ -46,6 +46,11 @@ class PackageServiceProvider extends ServiceProvider
         $this->app->bind(MessageBroker::class, config('transaction-outbox.broker'));
 
         $this->app->bind(AbstractConnection::class, function ($app) {
+
+            if($app->runningUnitTests()){
+                return;
+            }
+
             $connectionConfig = config('transaction-outbox.rabbitmq.hosts');
             $options    = config('transaction-outbox.rabbitmq.options');
 
