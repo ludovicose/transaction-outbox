@@ -98,7 +98,8 @@ final class RabbitMQBroker implements MessageBroker
                         function (AMQPMessage $msg) use ($closure, $channel, $queue) {
                             try {
                                 $closure($msg->body);
-                            } catch (Exception) {
+                            } catch (Exception $e) {
+                                report($e);
                                 $this->addMessageToErrorQueue($channel, $msg);
                             }
                         }
